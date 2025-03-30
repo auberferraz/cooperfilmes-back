@@ -1,7 +1,7 @@
 package com.nava.cooperfilmes_back.infra.security;
 
 import com.nava.cooperfilmes_back.domain.user.User;
-import com.nava.cooperfilmes_back.repositories.UserRepository;
+import com.nava.cooperfilmes_back.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.nava.cooperfilmes_back.repositories;
+package com.nava.cooperfilmes_back.repository;
 
 import com.nava.cooperfilmes_back.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

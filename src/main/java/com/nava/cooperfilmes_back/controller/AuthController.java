@@ -1,4 +1,4 @@
-package com.nava.cooperfilmes_back.controllers;
+package com.nava.cooperfilmes_back.controller;
 
 import com.nava.cooperfilmes_back.domain.user.User;
 import com.nava.cooperfilmes_back.dto.LoginRequestDTO;
@@ -6,12 +6,11 @@ import com.nava.cooperfilmes_back.dto.LoginResponseDTO;
 import com.nava.cooperfilmes_back.dto.RegisterRequestDTO;
 import com.nava.cooperfilmes_back.dto.ResponseDTO;
 import com.nava.cooperfilmes_back.infra.security.TokenService;
-import com.nava.cooperfilmes_back.repositories.UserRepository;
+import com.nava.cooperfilmes_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

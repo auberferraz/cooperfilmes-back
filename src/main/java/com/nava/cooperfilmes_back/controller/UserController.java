@@ -1,4 +1,4 @@
-package com.nava.cooperfilmes_back.controllers;
+package com.nava.cooperfilmes_back.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
