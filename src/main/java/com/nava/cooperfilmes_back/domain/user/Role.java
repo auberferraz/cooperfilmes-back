@@ -1,5 +1,6 @@
 package com.nava.cooperfilmes_back.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
