@@ -1,14 +1,11 @@
 package com.nava.cooperfilmes_back.domain.roteiro;
 
-import com.nava.cooperfilmes_back.domain.user.Role;
 import com.nava.cooperfilmes_back.dto.RoteiroRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
 
 @Entity
 @Table(name = "tb_roteiros")
@@ -29,10 +26,15 @@ public class Roteiro {
 
     private String movieScript;
 
-    public Roteiro(RoteiroRequestDTO request) {
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "status_id", nullable = false)
+    private Status status;
+
+    public Roteiro(RoteiroRequestDTO request, Status status) {
         this.email = request.email();
         this.name = request.name();
         this.phoneNumber = request.phoneNumber();
         this.movieScript = request.movieScript();
+        this.status = status;
     }
 }
