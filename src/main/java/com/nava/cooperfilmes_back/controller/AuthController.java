@@ -1,11 +1,13 @@
 package com.nava.cooperfilmes_back.controller;
 
+import com.nava.cooperfilmes_back.domain.user.Role;
 import com.nava.cooperfilmes_back.domain.user.User;
 import com.nava.cooperfilmes_back.dto.LoginRequestDTO;
 import com.nava.cooperfilmes_back.dto.LoginResponseDTO;
 import com.nava.cooperfilmes_back.dto.RegisterRequestDTO;
 import com.nava.cooperfilmes_back.dto.ResponseDTO;
 import com.nava.cooperfilmes_back.infra.security.TokenService;
+import com.nava.cooperfilmes_back.repository.RoleRepository;
 import com.nava.cooperfilmes_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class AuthController {
     private final UserRepository repository;
 
     @Autowired
+    private final RoleRepository roleRepository;
+
+    @Autowired
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -41,7 +46,7 @@ public class AuthController {
         User user = this.repository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User not found"));
         if(passwordEncoder.matches(body.password(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
-            return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new LoginResponseDTO(user.getEmail(), user.getName(), token, user.getRole().getName()));
         }
         return ResponseEntity.badRequest().build();
     }
@@ -55,10 +60,13 @@ public class AuthController {
             newUser.setPassword(passwordEncoder.encode(body.password()));
             newUser.setEmail(body.email());
             newUser.setName(body.name());
+
+            var basicRole = roleRepository.findByName(body.role());
+            newUser.setRole(basicRole);
             this.repository.save(newUser);
 
             String token = this.tokenService.generateToken(newUser);
-            return ResponseEntity.ok(new ResponseDTO(newUser.getEmail(), token));
+            return ResponseEntity.ok(new LoginResponseDTO(newUser.getEmail(), newUser.getName(), token, newUser.getRole().getName()));
         }
         return ResponseEntity.badRequest().build();
     }
