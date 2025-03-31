@@ -2,14 +2,14 @@ package com.nava.cooperfilmes_back.controller;
 
 import com.nava.cooperfilmes_back.domain.roteiro.Roteiro;
 import com.nava.cooperfilmes_back.dto.RoteiroRequestDTO;
+import com.nava.cooperfilmes_back.dto.RoteiroResponseDTO;
 import com.nava.cooperfilmes_back.repository.RoteiroRepository;
 import com.nava.cooperfilmes_back.repository.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/roteiro")
@@ -27,5 +27,21 @@ public class RoteiroController {
         Roteiro newRoteiro = new Roteiro(request, status);
         roteiroRepository.save(newRoteiro);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/consult-movie-script")
+    public ResponseEntity consultMovieScript(@RequestParam String email){
+//        var status = statusRepository.findByName("AGUARDANDO_ANALISE");
+//        Roteiro newRoteiro = new Roteiro(request, status);
+        var roteiros = roteiroRepository.findByEmail(email);
+        var res = roteiros.stream()
+                .map(roteiro -> new RoteiroResponseDTO(
+                        roteiro.getEmail(),
+                        roteiro.getName(),
+                        roteiro.getPhoneNumber(),
+                        roteiro.getMovieScript(),
+                        roteiro.getStatus().getName()
+                ));
+        return ResponseEntity.ok(res);
     }
 }
