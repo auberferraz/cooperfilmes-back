@@ -61,8 +61,8 @@ public class AuthController {
             newUser.setEmail(body.email());
             newUser.setName(body.name());
 
-            var basicRole = roleRepository.findByName(body.role());
-            newUser.setRole(basicRole);
+            var role = roleRepository.findByName(body.role());
+            newUser.setRole(role);
             this.repository.save(newUser);
 
             String token = this.tokenService.generateToken(newUser);
