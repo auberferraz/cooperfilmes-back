@@ -4,6 +4,7 @@ import com.nava.cooperfilmes_back.domain.roteiro.Roteiro;
 import com.nava.cooperfilmes_back.domain.roteiro.RoteiroStatusHandler;
 import com.nava.cooperfilmes_back.domain.roteiro.Status;
 import com.nava.cooperfilmes_back.domain.roteiro.handlers.*;
+import com.nava.cooperfilmes_back.domain.user.User;
 import com.nava.cooperfilmes_back.dto.NextStatusRequestDTO;
 import com.nava.cooperfilmes_back.dto.RoteiroResponseDTO;
 import com.nava.cooperfilmes_back.repository.RoteiroRepository;
@@ -11,9 +12,14 @@ import com.nava.cooperfilmes_back.repository.StatusRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,8 +72,12 @@ public class RoteiroUserService {
         );
     }
 
-    public ResponseEntity consultAllMovieScript(){
-        var roteiros = roteiroRepository.findAll();
+    public ResponseEntity consultAllMovieScript() {
+
+        var filter = applyFilterRoleForQuery();
+
+        var roteiros = roteiroRepository.findAllFilter(filter);
+
         var res = roteiros.stream()
                 .map(roteiro -> new RoteiroResponseDTO(
                         roteiro.getId(),
@@ -78,6 +88,42 @@ public class RoteiroUserService {
                         roteiro.getStatus().getName()
                 ));
         return ResponseEntity.ok(res);
+    }
+
+    private List<String> applyFilterRoleForQuery() {
+        var role = getRoleUserAuthenticate();
+
+        List<String> filterList = new ArrayList<>();
+
+        switch (role) {
+            case "ANALISTA":
+                filterList.add("AGUARDANDO_ANALISE");
+                filterList.add("EM_ANALISE");
+                break;
+            case "REVISOR":
+                filterList.add("AGUARDANDO_REVISAO");
+                filterList.add("EM_REVISAO");
+                break;
+            case "APROVADOR":
+                filterList.add("AGUARDANDO_APROVACAO");
+                filterList.add("EM_APROVACAO");
+                filterList.add("APROVADO");
+                break;
+            default:
+                // code block
+        }
+        return filterList;
+    }
+
+    private String getRoleUserAuthenticate() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            User user = (User) authentication.getPrincipal();
+            return user.getRole().getName();
+        }
+
+        throw new IllegalStateException("Erro ao buscar usuário autenticado.");
     }
 
 }
