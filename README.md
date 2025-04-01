@@ -2,8 +2,9 @@
 ### Tecnologias utilizadas:
 * #### Java 17
 * #### JWT
-* #### Hibernate
 * #### Spring Security
+* #### Hibernate
+* #### JPA
 * #### MySQL
 
 <br /><br />
