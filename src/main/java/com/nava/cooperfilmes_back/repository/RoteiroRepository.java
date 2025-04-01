@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface RoteiroRepository extends JpaRepository<Roteiro, Long> {
     List<Roteiro> findByEmail(String email);
-    Optional<Roteiro> findById(Long id);
+//    Optional<Roteiro> findById(Long id);
 }
