@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/client/roteiro")
-public class RoteiroClientController {
+@RequestMapping("/user/roteiro")
+public class RoteiroUserController {
 
     @Autowired
     RoteiroRepository roteiroRepository;
