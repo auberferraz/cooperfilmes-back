@@ -5,12 +5,14 @@ import com.nava.cooperfilmes_back.domain.roteiro.RoteiroStatusHandler;
 import com.nava.cooperfilmes_back.domain.roteiro.Status;
 import com.nava.cooperfilmes_back.domain.roteiro.handlers.*;
 import com.nava.cooperfilmes_back.dto.NextStatusRequestDTO;
+import com.nava.cooperfilmes_back.dto.RoteiroResponseDTO;
 import com.nava.cooperfilmes_back.repository.RoteiroRepository;
 import com.nava.cooperfilmes_back.repository.StatusRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -48,6 +50,21 @@ public class RoteiroUserService {
         roteiroRepository.save(rote);
 
         return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity consultMovieScript(Long id) {
+        var roteiro = roteiroRepository.findById(id);
+        return ResponseEntity.ok(roteiro.map(r -> new RoteiroResponseDTO(
+                                r.getId(),
+                                r.getEmail(),
+                                r.getName(),
+                                r.getPhoneNumber(),
+                                r.getMovieScript(),
+                                r.getStatus().getName()
+                        )
+                )
+        );
+
     }
 
 }

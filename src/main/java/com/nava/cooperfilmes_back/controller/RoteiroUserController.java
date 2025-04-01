@@ -16,12 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class RoteiroUserController {
 
     @Autowired
-    RoteiroRepository roteiroRepository;
-
-    @Autowired
-    StatusRepository statusRepository;
-
-    @Autowired
     RoteiroUserService roteiroUserService;
 
     @PostMapping(value = "/set-next-status")
@@ -31,17 +25,6 @@ public class RoteiroUserController {
 
     @GetMapping
     public ResponseEntity consultMovieScript(@RequestParam Long id) {
-        var roteiro = roteiroRepository.findById(id);
-        return ResponseEntity.ok(roteiro.map(r -> new RoteiroResponseDTO(
-                                r.getId(),
-                                r.getEmail(),
-                                r.getName(),
-                                r.getPhoneNumber(),
-                                r.getMovieScript(),
-                                r.getStatus().getName()
-                        )
-                )
-        );
-
+        return roteiroUserService.consultMovieScript(id);
     }
 }
