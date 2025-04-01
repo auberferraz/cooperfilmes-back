@@ -64,7 +64,20 @@ public class RoteiroUserService {
                         )
                 )
         );
+    }
 
+    public ResponseEntity consultAllMovieScript(){
+        var roteiros = roteiroRepository.findAll();
+        var res = roteiros.stream()
+                .map(roteiro -> new RoteiroResponseDTO(
+                        roteiro.getId(),
+                        roteiro.getEmail(),
+                        roteiro.getName(),
+                        roteiro.getPhoneNumber(),
+                        roteiro.getMovieScript(),
+                        roteiro.getStatus().getName()
+                ));
+        return ResponseEntity.ok(res);
     }
 
 }

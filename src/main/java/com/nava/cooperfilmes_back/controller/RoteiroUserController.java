@@ -27,4 +27,10 @@ public class RoteiroUserController {
     public ResponseEntity consultMovieScript(@RequestParam Long id) {
         return roteiroUserService.consultMovieScript(id);
     }
+
+    @GetMapping(value = "/consult-all-movie-script")
+    public ResponseEntity consultAllMovieScript(){
+        return roteiroUserService.consultAllMovieScript();
+    }
+
 }
