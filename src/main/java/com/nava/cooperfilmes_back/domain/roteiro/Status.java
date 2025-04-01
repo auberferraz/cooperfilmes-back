@@ -38,4 +38,14 @@ public class Status {
             return statusId;
         }
     }
+
+    public static Status.Values getByStatusId(long id) {
+        for (Status.Values value : Status.Values.values()) {
+            if (value.getRoleId() == id) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Nenhum valor encontrado para o ID: " + id);
+    }
+
 }
