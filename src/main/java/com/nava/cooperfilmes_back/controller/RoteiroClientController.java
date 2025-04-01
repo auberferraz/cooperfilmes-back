@@ -29,11 +29,10 @@ public class RoteiroClientController {
 
     @GetMapping(value = "/consult-movie-script")
     public ResponseEntity consultMovieScript(@RequestParam String email){
-//        var status = statusRepository.findByName("AGUARDANDO_ANALISE");
-//        Roteiro newRoteiro = new Roteiro(request, status);
         var roteiros = roteiroRepository.findByEmail(email);
         var res = roteiros.stream()
                 .map(roteiro -> new RoteiroResponseDTO(
+                        roteiro.getId(),
                         roteiro.getEmail(),
                         roteiro.getName(),
                         roteiro.getPhoneNumber(),

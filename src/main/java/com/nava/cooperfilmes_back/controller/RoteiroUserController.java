@@ -19,27 +19,27 @@ public class RoteiroUserController {
     @Autowired
     StatusRepository statusRepository;
 
-    @PostMapping(value = "/send-movie-script")
-    public ResponseEntity<String> sendMovieScript(@RequestBody RoteiroRequestDTO request){
-        var status = statusRepository.findByName("AGUARDANDO_ANALISE");
-        Roteiro newRoteiro = new Roteiro(request, status);
-        roteiroRepository.save(newRoteiro);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping(value = "/consult-movie-script")
-    public ResponseEntity consultMovieScript(@RequestParam String email){
+//    @PostMapping(value = "/send-movie-script")
+//    public ResponseEntity<String> sendMovieScript(@RequestBody RoteiroRequestDTO request){
 //        var status = statusRepository.findByName("AGUARDANDO_ANALISE");
 //        Roteiro newRoteiro = new Roteiro(request, status);
-        var roteiros = roteiroRepository.findByEmail(email);
-        var res = roteiros.stream()
-                .map(roteiro -> new RoteiroResponseDTO(
-                        roteiro.getEmail(),
-                        roteiro.getName(),
-                        roteiro.getPhoneNumber(),
-                        roteiro.getMovieScript(),
-                        roteiro.getStatus().getName()
-                ));
-        return ResponseEntity.ok(res);
+//        roteiroRepository.save(newRoteiro);
+//        return ResponseEntity.ok().build();
+//    }
+
+    @GetMapping
+    public ResponseEntity consultMovieScript(@RequestParam Long id) {
+        var roteiro = roteiroRepository.findById(id);
+        return ResponseEntity.ok(roteiro.map(r -> new RoteiroResponseDTO(
+                                r.getId(),
+                                r.getEmail(),
+                                r.getName(),
+                                r.getPhoneNumber(),
+                                r.getMovieScript(),
+                                r.getStatus().getName()
+                        )
+                )
+        );
+
     }
 }
