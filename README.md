@@ -6,7 +6,12 @@
 * #### Spring Security
 * #### Hibernate
 * #### JPA
-* #### MySQL~~~~
+* #### MySQL
+
+<br /><br />
+
+### Repositório Frontend deste projeto:
+* #### https://github.com/auberferraz/cooperfilmes-fron
 
 <br /><br />
 
@@ -17,7 +22,7 @@
 
 ### CREDENCIAIS DE ACESSO
 * #### Login: analista@gmail.com
-* #### Login: revidor@gmail.com
+* #### Login: revisor@gmail.com
 * #### Login: aprovador1@gmail.com
 * #### Login: aprovador2@gmail.com
 * #### Login: aprovador3@gmail.com
