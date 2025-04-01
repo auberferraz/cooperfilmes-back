@@ -1,6 +1,9 @@
 package com.nava.cooperfilmes_back.service;
 
+import com.nava.cooperfilmes_back.domain.roteiro.Roteiro;
+import com.nava.cooperfilmes_back.domain.roteiro.RoteiroStatusHandler;
 import com.nava.cooperfilmes_back.domain.roteiro.Status;
+import com.nava.cooperfilmes_back.domain.roteiro.handlers.*;
 import com.nava.cooperfilmes_back.dto.NextStatusRequestDTO;
 import com.nava.cooperfilmes_back.repository.RoteiroRepository;
 import com.nava.cooperfilmes_back.repository.StatusRepository;
@@ -20,21 +23,29 @@ public class RoteiroUserService {
     @Autowired
     StatusRepository statusRepository;
 
-    public ResponseEntity<String> setNextStatus(NextStatusRequestDTO request){
+    public ResponseEntity<String> setNextStatus(NextStatusRequestDTO request) {
         var roteiro = roteiroRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Objeto com ID " + request.id() + " não encontrado!"));
 
-        var statusList = Status.Values.values();
 
-        if ((roteiro.getStatus().getStatusId() == 7) || roteiro.getStatus().getStatusId() == 8) {
-            return ResponseEntity.badRequest().build();
-        }
+        RoteiroStatusHandler aguardandoAnaliseHandler = new AguardandoAnaliseHandler();
+        RoteiroStatusHandler emAnaliseHandler = new EmAnaliseHandler();
+        RoteiroStatusHandler aguardandoRevisaoHandler = new AguardandoRevisaoHandler();
+        RoteiroStatusHandler emRevisaoHandler = new EmRevisaoHandler();
+        RoteiroStatusHandler aguardandoAprovacaoHandler = new AguardandoAprovacaoHandler();
+        RoteiroStatusHandler emAprovacaoHandler = new EmAprovacaoHandler();
+        RoteiroStatusHandler aprovadoHandler = new AprovadoHandler();
 
-        var nextId = roteiro.getStatus().getStatusId() + 1;
-        Optional<Status> newStatus = statusRepository.findById(nextId);
-        roteiro.setStatus(newStatus.get());
+        aguardandoAnaliseHandler.setNext(emAnaliseHandler);
+        emAnaliseHandler.setNext(aguardandoRevisaoHandler);
+        aguardandoRevisaoHandler.setNext(emRevisaoHandler);
+        emRevisaoHandler.setNext(aguardandoAprovacaoHandler);
+        aguardandoAprovacaoHandler.setNext(emAprovacaoHandler);
+        emAprovacaoHandler.setNext(aprovadoHandler);
 
-        roteiroRepository.save(roteiro);
+        Roteiro rote = aguardandoAnaliseHandler.handle(roteiro);
+
+        roteiroRepository.save(rote);
 
         return ResponseEntity.ok().build();
     }
