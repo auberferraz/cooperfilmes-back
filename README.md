@@ -1,11 +1,12 @@
 # cooperfilmes-back
 ### Tecnologias utilizadas:
 * #### Java 17
+* #### Maven
 * #### JWT
 * #### Spring Security
 * #### Hibernate
 * #### JPA
-* #### MySQL
+* #### MySQL~~~~
 
 <br /><br />
 
